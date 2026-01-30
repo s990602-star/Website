@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一週歷史檔案庫 | Archive of the Week </title>
+    <style>
+        /* --- 基礎設定 --- */
+        :root {
+            --primary-color: #2c3e50; /* 深藍灰：代表學術與歷史 */
+            --accent-color: #c0392b;  /* 歷史紅：用於強調重點 */
+            --bg-color: #f4f4f4;      /* 米灰白：類似紙張質感 */
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --timeline-line: #bdc3c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, "PingFang TC", "LiHei Pro", "Heiti TC", "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* --- 導航列 --- */
+        nav {
+            background: var(--primary-color);
+            color: #fff;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ecf0f1;
+            text-decoration: underline;
+        }
+
+        /* --- Header --- */
+        header {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .meta-info {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* --- 通用區塊設定 --- */
+
+        /* --- 螢光筆特效 (黃色) --- */
+        .highlight {
+            /* 使用漸層模擬手繪螢光筆的通透感，比純色背景更自然 */
+            background: linear-gradient(to bottom, transparent 0%, rgba(255, 235, 59, 0.6) 0%);
+            padding: 0 4px;
+            border-radius: 2px;
+            /* 如果文字換行，確保每一行都有螢光效果 */
+            -webkit-box-decoration-break: clone;
+            box-decoration-break: clone;
+        }
+
+        section {
+            padding: 4rem 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-color);
+            margin: 10px auto 0;
+        }
+
+        /* --- 1. 時間軸 (Timeline) --- */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%; /* 預設在中間 */
+            width: 4px;
+            background: var(--timeline-line);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            margin-bottom: 3rem;
+            position: relative;
+            width: 50%;
+            min-height: 300px;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 40px;
+            text-align: left;
+        }
+
+        /* 針對時間軸卡片內的所有段落設定行距 */
+        .timeline-content p {
+            line-height: 1.5; /* 這裡就是設定「一行半」 */
+            margin-bottom: 0; /* 移除段落預設的下邊距，讓卡片緊湊點 */
+        }
+
+        /* (上一輪的設定保留) 針對奇數項的對齊 */
+        .timeline-item:nth-child(odd) .timeline-content p {
+            text-align: justify;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 40px;
+            text-align: left;
+        }
+
+        /* 時間軸上的點 */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            border: 4px solid #fff;
+            box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.2);
+            z-index: 10;
+        }
+
+        .timeline-item:nth-child(odd)::after {
+            right: -12px;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -12px;
+        }
+
+        .timeline-content {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+        }
+
+        /* --- 新增：時間軸側邊照片設定 --- */
+        .timeline-side-img {
+            position: absolute;
+            top: 0;
+            width: 100%; /* 照片佔據空白區域的寬度 */
+            max-width: 400px; /* 照片最大寬度，避免太大 */
+            z-index: 1;
+        }
+
+        .timeline-side-img img {
+            /* --- 關鍵修改區 --- */
+            width: auto;          /* 寬度讓它自己決定，這樣才會等比例 */
+            max-width: 100%;      /* 但是寬度不能超過隔壁的空白區 */
+            
+            height: auto;         /* 高度讓它自己決定 */
+            max-height: 400px;    /* ★關鍵：限制最大高度不能超過 280px */
+                                  /* (我們卡片最小高度是 300px，設 280 留點邊界才不會壓到下面) */
+            
+            object-fit: contain;  /* 確保圖片完整顯示，不裁切 */
+            /* ----------------- */
+
+            /* --- 視覺裝飾 (保留原本的) --- */
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+            border: 4px solid #fff; 
+            transform: rotate(-2deg); 
+            transition: transform 0.3s;
+        }
+
+        .timeline-side-img img:hover {
+            transform: rotate(0deg) scale(1.02); /* 滑鼠經過時擺正並放大 */
+            z-index: 20;
+        }
+
+        /* 奇數項 (週一、週三)：文字在左，所以圖片要飛到「右邊」 */
+        .timeline-item:nth-child(odd) .timeline-side-img {
+            left: 110%; /* 100% 代表中線，110% 讓它稍微離中線遠一點 */
+            text-align: center;
+        }
+
+        /* 偶數項 (週二、週四)：文字在右，所以圖片要飛到「左邊」 */
+        .timeline-item:nth-child(even) .timeline-side-img {
+            right: 110%; /* 飛到中線左側 */
+            text-align: center; /* 讓圖片靠右對齊（靠近中線） */
+        }
+
+        /* --- 頁尾大照片設定 --- */
+        .footer-gallery {
+            max-width: 900px;
+            margin: 0 auto 2rem auto;
+            text-align: center;
+            padding: 0 1rem;
+        }
+        
+        .footer-gallery img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover; /* 確保照片填滿但不變形 */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* --- 手機版 RWD 特別調整 (重要！) --- */
+        /* 手機變單欄時，把照片塞回卡片下方，不然會跑版 */
+        @media (max-width: 768px) {
+            .timeline-side-img {
+                position: static; /* 取消絕對定位 */
+                width: 100%;
+                max-width: 100%;
+                margin-top: 1rem; /* 與上方文字保持距離 */
+                padding: 0;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-side-img,
+            .timeline-item:nth-child(even) .timeline-side-img {
+                left: auto;
+                right: auto;
+                text-align: center;
+            }
+
+            .timeline-side-img img {
+                transform: rotate(0deg); /* 手機版不傾斜，比較整齊 */
+            }
+        }
+
+        .date-badge {
+            display: inline-block;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- 2. 概念卡片 (Concepts) --- */
+        .concepts-grid {
+            display: grid;
+            /* 原本是 repeat(auto-fit...) 改成下面這行 */
+            grid-template-columns: 1fr; 
+            gap: 2rem;
+            
+            /* 建議加上這行：限制最大寬度，
+               不然卡片變成單欄後會拉太長，閱讀體驗較差 */
+            max-width: 700px; 
+            margin: 0 auto; /* 讓整排卡片置中 */
+        }
+
+        .concept-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 5px solid var(--accent-color);
+        }
+
+        .concept-header {
+            background: #fdfdfd;
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .concept-body {
+            padding: 1.5rem;
+        }
+
+        .concept-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+        }
+
+        /* --- 3. Positionality 對照表 (修改後) --- */
+        /* 最外層容器，控制三排之間的距離 */
+        .positionality-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem; /* 每一排之間的垂直間距 */
+        }
+
+        /* 每一排的容器 (左方塊 + 箭頭 + 右方塊) */
+        .positionality-row {
+            display: flex;
+            align-items: stretch; /* 讓左右方塊高度一致 */
+            gap: 1.5rem;
+        }
+
+        /* 方塊本體設定 */
+        .pos-box {
+            flex: 1; /* 左右方塊平分寬度 */
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative;
+            min-width: 250px; /* 確保最小寬度 */
+        }
+
+        .pos-box.before {
+            border-left: 5px solid #7f8c8d; /* 灰色代表過去 */
+        }
+
+        .pos-box.after {
+            border-left: 5px solid var(--accent-color); /* 紅色代表現在/覺醒 */
+        }
+
+        .pos-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* 箭頭圖示設定 (修改後：預設顯示) */
+        .arrow-icon {
+            display: flex; /* 使用 flex 讓箭頭符號置中 */
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--accent-color); /* 使用強調色 */
+            padding: 0 0.5rem;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--primary-color);
+            color: #bdc3c7;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* --- RWD 手機版調整 --- */
+        @media (max-width: 768px) {
+            /* 時間軸調整 */
+            .timeline::before {
+                left: 30px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px !important;
+                padding-right: 0 !important;
+                text-align: left !important;
+            }
+            .timeline-item::after {
+                left: 18px !important;
+            }
+            
+            /* Positionality 調整 (修改後) */
+            .positionality-row {
+                flex-direction: column; /* 手機版改為垂直排列 */
+                gap: 1rem;
+            }
+            .arrow-icon {
+                transform: rotate(90deg); /* 箭頭向下指 */
+                padding: 0.5rem 0; /* 調整垂直間距 */
+            }
+        }
+
+        
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="#timeline">1. 時間軸建構</a></li>
+            <li><a href="#concepts">2. 重要概念</a></li>
+            <li><a href="#positionality">3. Positionality的變化</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>第29屆歷史研習營：「迷信」的全球史</h1>
+        <p>呈現我們的一週歷史｜Archive of the Week</p>
+        <div class="meta-info">
+            日期：2026.1.26-2026.1.30｜發表小組：第一組
+        </div>
+    </header>
+
+    <section id="timeline">
+        <h2>1. 時間軸建構：問題與概念的成形</h2>
+        <div class="timeline">
+              
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="date-badge">Day 1：週一</span>
+                    <h3>「迷信」的定義、中國中古的反對「迷信」</h3>
+                    <p>
+<br>一、定義：弱水老師在演講中定義了「迷信」，而且這定義是會跟著時代而改變：早期是否定另一種教義為「迷信」，啟蒙運動以後演變成整個宗教都是「迷信」。<br><br>
+二、套用的不和諧：若將「迷信」定義隨時代變動的概念，套用到中國中古來看，會發現有不和諧之處。從弱水老師提供的〈神滅論〉一文可見，范縝不僅是否定對方的教義，更關鍵之處，是指出佛教會造成的現實問題，而這正是范縝立論反對佛教的重要動力，可見中國中古時期對於「迷信」的批判，具有更加現實的原因，而非僅只是批判其教義。</p>
+                </div>
+
+            <div class="timeline-side-img">
+                <img src="https://github.com/user-attachments/assets/27a79275-3936-4b01-94fc-eabf05b3ba82" alt="週一活動照片">
+                <div style="font-size:1.5rem; color:#888; margin-top:5px;">▲ 李所長開幕儀式</div>
+            </div>
+        </div><div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="date-badge">Day 2：週二</span>
+                    <h3>世界觀、宗教資源、劃定「迷信」邊界</h3>
+                    <p>
+<br>一、世界觀：在修平老師的演講當中，可得知宗教觀就等同於世界觀。而現代人有可能因為對於過去的世界觀太過陌生，導致不理解這些行為的脈絡，而將過往的宗教行為斥為「迷信」。<br><br>
+二、宗教資源：宗教可以作為一種詮釋與論述的資源，將宗教教義、語言、價值判斷為自己所用。<br><br>
+三、劃定「迷信」邊界：在仁淵老師的演講中，讓我們看到「迷信」的「邊界」。因為在《破邪詳辯》當中，黃育楩逐一否定當時的「迷信」，而這樣的行為就是在劃定與界定「迷信」為何。</p>
+                </div>
+            <div class="timeline-side-img">
+                <img src="https://github.com/user-attachments/assets/54fc352d-0a56-4b4f-8d7b-e5bc25051d1d" alt="週二活動照片">
+                <div style="font-size:1.5rem; color:#888; margin-top:5px;">▲ 李老師演講關鍵投影片</div>
+            </div>
+        </div><div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="date-badge">Day 3：週三</span>
+                    <h3>「迷信」邊界的再認識、「迷信」概念在時代轉折下的改變</h3>
+                    <p>
+<br>一、「迷信」邊界的再認識：在毓荃老師的演講中，界定了「宗教」與「科學」的邊界，把其他部分推出去，因而形成了「迷信」的邊界。<br><br>
+二、「迷信」的中性化與文化化：在熙遠老師的演講中，「迷信」在20世紀初期被納入民俗學當中，被中性化了。而在璧榛老師的演講中，也提到了「迷信」一開始被打壓，後來被文化化，變成了國寶，但這也導致執行「迷信」之人，變成了被觀賞的對象。<br><br>
+三、教與宗教的時代轉折：熙遠老師的研究顯示，從中國傳統「教」宇宙轉變為「宗教」的宇宙時，基督教被放置在中央位置，儒教被邊緣化了。誰是中心、誰是邊陲，這定義在時代變遷下被重塑了。<br><br>
+四、時代與迷信、科學觀念的結合：在民國時期，迷信與過往帝制連結，科學與共和結合。這時候，拋棄了迷信，就像是拋棄了過去的帝制中國，要往科學的、共和的新中國邁進。<br><br>
+五、辯論反思：在辯論當中，國家對個人自由的介入與控制程度，是辯論的重要關鍵。國家到底對於宗教自由控制的邊界要到哪裡，才不會變成對宗教自由的過度限制呢？</p>
+                </div>
+            <div class="timeline-side-img">
+                <img src="https://github.com/user-attachments/assets/cfd60241-50a0-4420-91c6-090e06ddbbb7" alt="週三活動照片">
+                <div style="font-size:1.5rem; color:#888; margin-top:5px;">▲ 陳老師演講照片</div>
+            </div>
+        </div><div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="date-badge">Day 4：週四</span>
+                    <h3>田野調查、辯論的反思</h3>
+                    <p>
+<br>一、因為「迷」所以「信」：在戶外教學活動中，組員們有此反思。此說的第一種解釋，是因為神秘感，使人好奇或讓人想要靠近、一探究竟。另外一種解釋，是因為迷茫所以信。在志昌老師的詢問之下，組員們思考到，若面對算命師，可能會只相信好的算命結果，不相信不好的算命結果。但是，如果對儀式不理解，例如親人過世，要執行喪葬儀式的時候，那就會選擇相信宗教專家。所以相信、不相信「迷信」，事實上會因為情境而發生改變。</br><br>
+二、辯論的反思：（一）國家控制的道德困境：平一老師在討論中給予我們組很多的想法。在辯論當中，多用權力、干預自由等說法批判管制「迷信」的行為。然國家真的可以什麼都不用管嗎？批判國家權力的界線是什麼？或是，國家做什麼才是對的，如果國家真要幫助人民的話？（二）人類學家看到恐怖儀式的道德困境：如果看到人殉、看到極端的邪教行為，作為學者，可以無動於衷嗎？若是不論是什麼情況，都以「世界觀」加以解釋，會不會變成道德相對主義？目前想到的辦法是，把歷史的情況與學者的詮釋切割。歷史情境需要確實呈現，學者判斷亦然，只是兩者必須要明確區分。學者要遵守的價值是什麼？應要相信有一種超越時間性的價值存在，例如基本人權、不能接受殺人。此些超越時間的基本價值，可用以消解史家的面對極端「迷信」時的道德困境。</p>
+                </div>
+            <div class="timeline-side-img">
+                <img src="https://github.com/user-attachments/assets/3c3d8a97-8410-4aa7-8703-c0a8cbbb6b25" alt="週四活動照片">
+                <div style="font-size:1.5rem; color:#888; margin-top:5px;">▲ 臺南城池圖</div>
+            </div>
+        </div><div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="date-badge">Day 5：週五</span>
+                    <h3>發表當日</h3>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="concepts">
+        <h2>2. 重要概念：關鍵概念如何重塑理解</h2>
+        <div class="concepts-grid">
+              
+            <div class="concept-card">
+                <div class="concept-header">
+                    <div class="concept-label">概念 A</div>
+                    <h3>邊界</h3>
+                </div>
+                <div class="concept-body">
+                    <p><strong>闡釋：<br><br>第一個關鍵概念為「邊界」，營期中我們聽了諸多演講，我們嘗試從各個老師的講演中區分「邊界」的類型，找出一個跨時代迷信「邊界」概念史的輪廓。除了弱水老師第一天提過的「教義」或者「啟蒙」論述外，若從人類整體歷史來說，「階級」可以說是區分迷信邊界的跨時代標準。如我們在修平老師的例子看到，商代的奴隸可能受到「權力」的壓迫而不得不參與「人牲」，六朝也可以看到平民想辦法利用佛教的輪迴觀對抗貴族，清代的《破邪詳辯》出於官員立場，宣布他們不理解的信仰為迷信。<br><br>
+「學科」與「時代」，是近現代新出現區分「迷信」的標準。如巫老師提供很具體的東大內部學科分類產生的「迷信」標準，或者近代中國以民俗學統攝宗教，淡化迷信意涵；時代的話又與近代革命的歷程息息相關，這導致迷信常與「帝制、封建」等時代象徵連結，進而賦予迷信落伍的標籤，呈現共和時代的進步。以上的定義多從學術出發，若從學術場域回歸個人，我們又能發現，其實生活中有很多時候，<span class="highlight">迷信的邊界常是「主觀感受」的問題</span>，如我們可能不相信卜辭的占卜，但我們能相信擲茭；阿嬤可能不相信塔羅牌，但他能相信算命師，這種區分標準常常與上述邊界不見得有明顯關係，多從個人主觀出發。因此，迷信其實不只是歷史學的學術議題，也是人人日常生活的一部分。</strong>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-header">
+                    <div class="concept-label">概念 B</div>
+                    <h3>宗教觀</h3>
+                </div>
+                <div class="concept-body">
+                    <p><strong>闡釋：<br><br>第二個關鍵概念為「宗教觀」：<span class="highlight">宗教觀可以理解為一個世界觀</span>，我們所謂的世界觀涉及對世界的想象、運作方式，以及人們在其中的立身處世、價值準則、行為邏輯，還有對宗教的使用方式。從這個角度，我們可以引入Campany的<span class="highlight">工具箱</span>概念，也就是擁有不同世界觀的人們往往會用不同的方式來汲取他們世界的宗教資源，來達到他們的特定目的，無論是要用來強化特別群體的權力、又或是解決個人的困頓迷茫。其中有些方式或許會抵觸被當代普遍認可的人權價值，但在輕易使用當代概念，比如「迷信」對其進行批判之前，或許應該先用同理心來嘗試對他們進行理解，嘗試分梳「迷信」標籤下的複雜情況與層次，透過這樣的努力，我們或許會發現所謂的「迷信」行為，不全然是因為無知蒙昧而導致的盲信，而有可能是因為「迷惑」獲得解答、「迷茫」獲得舒緩，又或是對宛如謎題的神秘現象的好奇，進而產生的「信」。在此基礎上，我們或許就有機會看到、體驗更多重的世界觀。</strong>
+                </div>
+            </div>
+
+             <div class="concept-card">
+                <div class="concept-header">
+                    <div class="concept-label">概念 C</div>
+                    <h3>反思營隊的迷信反思</h3>
+                </div>
+                <div class="concept-body">
+                    <p><strong>闡釋：<br><br>當我們在反思迷信的時候，其實已認為迷信本身是一種錯誤。在討論當中，我們思考了可以運用什麼詞彙替代迷信，或繼續使用迷信這個詞彙、但將歷史上迷信的運用與學者的詮釋分隔，不論這樣的討論最終會不會有結果，這終究都是一種自我的對話，會為自我、學術增加複雜性、提高脫離二元思考的可能。</strong>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="positionality">
+        <h2>3. Positionality的變化：自身反思與研究立場的轉移</h2>
+
+        <div class="positionality-wrapper">
+            
+            <div class="positionality-row">
+                <div class="pos-box before">
+                    <div class="pos-title">初始的立場 (面向一)</div>
+                    <p>我們本來以為「迷信」是可以減少溝通成本的詞彙，因為使用一個標籤去定義多個事物是一件不需要持續思考的事。我們甚至不解，為什麼一些歷史學者會要我們反思「能否在學術上使用迷信一詞」雖有價值判斷，但真有這麼不妥嗎？</p>
+                </div>
+
+                <div class="arrow-icon">➡</div>
+
+                <div class="pos-box after">
+                    <div class="pos-title">現在的理解 (面向一)</div>
+                    <p>但在經歷研習營的討論與溯源後，我們才知道如「迷信」這樣朦朧又多意的標籤反而不利于溝通。有鑑於此，我們在學術使用「迷信」一詞會更加謹慎，並思考是否有更精準的詞彙能代替。再來，除了在學術使用上更精確外，我們於現實生活中遇到看似「迷信」的行為時，也能因此次探討「迷信」一詞的複雜性而更有同理心去反思其背後的世界觀與行為的動機。</p>
+                </div>
+            </div>
+
+            <div class="positionality-row">
+                <div class="pos-box before">
+                    <div class="pos-title">初始的立場 (面向二)</div>
+                    <p>參加這次營隊之前，對宗教信仰或迷信的看法大多偏向負面，習慣站在理性他者的高度，將所謂的「迷信」視作偏「不科學」的表現，並傾向將宇宙觀與宗教觀剝離，試圖以現代科學的框架去獨立解讀宗教信仰。</p>
+                </div>
+
+                <div class="arrow-icon">➡</div>
+
+                <div class="pos-box after">
+                    <div class="pos-title">現在的理解 (面向二)</div>
+                    <p>所謂的「迷信」，往往只是另一種與我不同的內在理路與生存邏輯。不應以我的標準來審視「迷信」，而是承認其價值，並與之對話。每一種「迷信」背後，都隱藏著一種對生命秩序的渴望。只有當我們放下「迷信與否」的虛假審判，而是深入到如此宗教觀的面貌以及形成原因，真正的對話才有可能開啟。這樣的思考更能幫助我們回過頭來修正與擴展自身的世界觀。在對話中，我們得以看見自己的邊界。</p>
+                </div>
+            </div>
+
+            <div class="positionality-row">
+                <div class="pos-box before">
+                    <div class="pos-title">初始的立場 (面向三)</div>
+                    <p>在參加研習營之前，會將「迷信」這一概念，理解為一種帶有負面意味的表述。它往往被用來指稱與「理性」或「正統」相對立的事物，因而被信念不同的人批判，意即使用此詞彙來思考或研究，是一種以自我為中心來理解和評判他者的方式。</p>
+                </div>
+
+                <div class="arrow-icon">➡</div>
+
+                <div class="pos-box after">
+                    <div class="pos-title">現在的理解 (面向三)</div>
+                    <p>參加了這個活動後，發現此營隊的重點在於反思迷信這個詞的意義與用法。經過這幾日的討論與思考，發現這個詞彙儘管確實帶有一定的負面意涵，但學者們還是可以透過更深層的反思，以及更審慎的使用，將這個詞彙限縮在一個較能被大家接受的範圍（比如轉引）。另方面，也從這個研習營學習到了其他可能的替代性且更安全的概念（比如習俗）。</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="gallery">
+        <h2>準備最終報告剪影</h2>
+        <div class="footer-gallery">
+            <img src="https://github.com/user-attachments/assets/03611a25-ba9f-4981-96f2-96bb8a7c1790" alt="全體大合照">
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Archive of the Week. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
