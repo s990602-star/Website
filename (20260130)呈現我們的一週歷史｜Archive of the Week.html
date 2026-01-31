@@ -423,6 +423,35 @@
             nav ul {
                 gap: 1rem; /* 原本是 2rem，手機上改小一點避免換行太醜 */
             }
+            /* ★ 新增以下這幾段來解決斷行醜的問題 ★ */
+
+            /* 1. 針對導航列 (上方按鈕) */
+            nav ul {
+                gap: 0.8rem; /* 間距再縮小一點 */
+            }
+            nav a {
+                font-size: 0.85rem;   /* 原本是 1.1rem，縮小讓它能塞進一行 */
+                white-space: nowrap;  /* 強制導航文字「死都不准換行」 */
+            }
+
+            /* 2. 針對大標題 (H1) - 歷史研習營 */
+            header h1 {
+                font-size: 1.6rem;    /* 原本 2.5rem，手機上改小 */
+                line-height: 1.4;     /* 行高拉開一點點，閱讀較舒適 */
+                word-break: keep-all; /* ★關鍵：這會讓「研習營」整組換行，不會切斷 */
+            }
+
+            /* 3. 針對區塊標題 (H2) - 時間軸建構、重要概念 */
+            h2 {
+                font-size: 1.5rem;    /* 原本 2rem，手機上改小 */
+                word-break: keep-all; /* ★關鍵：這會讓「時間軸建構」盡量黏在一起 */
+                padding: 0 10px;      /* 左右留點緩衝 */
+            }
+            
+            /* 修正副標題文字大小 */
+            header p {
+                font-size: 1rem;
+            }
             
             /* 時間軸調整 */
             .timeline::before {
@@ -651,6 +680,7 @@
 </body>
 
 </html>
+
 
 
 
