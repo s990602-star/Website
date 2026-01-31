@@ -212,6 +212,14 @@
             max-width: 400px; /* 照片最大寬度，避免太大 */
             z-index: 1;
         }
+        
+        /* 照片說明的基礎設定 (電腦版) */
+        .img-caption {
+            font-size: 1.2rem;   /* 原本你是設 1.5rem，我覺得 1.2rem 比較剛好，你可以自己改 */
+            color: #888;
+            margin-top: 5px;
+            font-weight: bold;   /* 我稍微加粗了一點，比較清楚 */
+        }
 
         .timeline-side-img img {
             /* --- 關鍵修改區 --- */
@@ -458,6 +466,11 @@
                 font-size: 1rem;
             }
             
+            .img-caption {
+                font-size: 0.9rem;  /* 這裡就是你要的手機版大小，比電腦版小很多 */
+                color: #666;        /* 手機上顏色可以稍微深一點點，閱讀比較不吃力 */
+            }
+            
             /* 時間軸調整 */
             .timeline::before {
                 left: 30px;
@@ -521,7 +534,7 @@
 
             <div class="timeline-side-img">
                 <img src="https://github.com/user-attachments/assets/27a79275-3936-4b01-94fc-eabf05b3ba82" alt="週一活動照片">
-                <div style="font-size:1.5rem; color:#888; margin-top:5px;">▲ 李所長開幕儀式</div>
+                <div style="img-caption">▲ 李所長開幕儀式</div>
             </div>
         </div><div class="timeline-item">
                 <div class="timeline-content">
@@ -534,7 +547,7 @@
                 </div>
             <div class="timeline-side-img">
                 <img src="https://github.com/user-attachments/assets/54fc352d-0a56-4b4f-8d7b-e5bc25051d1d" alt="週二活動照片">
-                <div style="font-size:1.5rem; color:#888; margin-top:5px;">▲ 李老師演講關鍵投影片</div>
+                <div style="img-caption">▲ 李老師演講關鍵投影片</div>
             </div>
         </div><div class="timeline-item">
                 <div class="timeline-content">
@@ -549,7 +562,7 @@
                 </div>
             <div class="timeline-side-img">
                 <img src="https://github.com/user-attachments/assets/cfd60241-50a0-4420-91c6-090e06ddbbb7" alt="週三活動照片">
-                <div style="font-size:1.5rem; color:#888; margin-top:5px;">▲ 陳老師演講照片</div>
+                <div style="img-caption">▲ 陳老師演講照片</div>
             </div>
         </div><div class="timeline-item">
                 <div class="timeline-content">
@@ -561,7 +574,7 @@
                 </div>
             <div class="timeline-side-img">
                 <img src="https://github.com/user-attachments/assets/3c3d8a97-8410-4aa7-8703-c0a8cbbb6b25" alt="週四活動照片">
-                <div style="font-size:1.5rem; color:#888; margin-top:5px;">▲ 臺南城池圖</div>
+                <div style="img-caption">▲ 臺南城池圖</div>
             </div>
         </div><div class="timeline-item">
                 <div class="timeline-content">
@@ -685,6 +698,7 @@
 </body>
 
 </html>
+
 
 
 
