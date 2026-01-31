@@ -103,6 +103,7 @@
             padding: 4rem 1rem;
             max-width: 900px;
             margin: 0 auto;
+            scroll-margin-top: 80px;
         }
 
         h2 {
@@ -411,6 +412,18 @@
 
         /* --- RWD 手機版調整 --- */
         @media (max-width: 768px) {
+
+            /* 手機版導航列調整：增加左右呼吸空間 */
+            nav {
+                /* 上下維持 1rem，左右改為 1.5rem (約 24px) */
+                padding: 1rem 1.5rem; 
+            }
+
+            /* 額外建議：手機版文字若太擠，可以縮小選項間距 */
+            nav ul {
+                gap: 1rem; /* 原本是 2rem，手機上改小一點避免換行太醜 */
+            }
+            
             /* 時間軸調整 */
             .timeline::before {
                 left: 30px;
@@ -638,4 +651,5 @@
 </body>
 
 </html>
+
 
