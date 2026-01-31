@@ -447,7 +447,12 @@
                 word-break: keep-all; /* ★關鍵：這會讓「時間軸建構」盡量黏在一起 */
                 padding: 0 10px;      /* 左右留點緩衝 */
             }
-            
+
+            .subtitle {
+                display: block;      /* 讓這個 span 變成「方塊」，強制換到下一行 */
+                margin-top: 5px;     /* 與上一行稍微拉開一點距離，比較好看 */
+            }
+
             /* 修正副標題文字大小 */
             header p {
                 font-size: 1rem;
@@ -494,7 +499,7 @@
     </nav>
 
     <header>
-        <h1>第29屆歷史研習營：「迷信」的全球史</h1>
+        <h1>第29屆歷史研習營：<span class="subtitle">「迷信」的全球史</span></h1>
         <p>呈現我們的一週歷史｜Archive of the Week</p>
         <div class="meta-info">
             日期：2026.1.26-2026.1.30｜發表小組：第一組
@@ -502,7 +507,7 @@
     </header>
 
     <section id="timeline">
-        <h2>1. 時間軸建構：問題與概念的成形</h2>
+        <h2>1. 時間軸建構：<span class="subtitle">問題與概念的成形</span></h2>
         <div class="timeline">
               
             <div class="timeline-item">
@@ -569,7 +574,7 @@
     </section>
 
     <section id="concepts">
-        <h2>2. 重要概念：關鍵概念如何重塑理解</h2>
+        <h2>2. 重要概念：<span class="subtitle">關鍵概念如何重塑理解</span></h2>
         <div class="concepts-grid">
               
             <div class="concept-card">
@@ -607,7 +612,7 @@
     </section>
 
     <section id="positionality">
-        <h2>3. Positionality的變化：自身反思與研究立場的轉移</h2>
+        <h2>3. Positionality的變化：<span class="subtitle">自身反思與研究立場的轉移</span></h2>
 
         <div class="positionality-wrapper">
             
@@ -680,6 +685,7 @@
 </body>
 
 </html>
+
 
 
 
